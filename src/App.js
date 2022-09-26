@@ -3,43 +3,37 @@ import "./App.css";
 import { Component } from "react";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "Jansen Lima",
-      cont: 0,
-    };
-  }
-
-  handleSetName = () => {
-    this.setState({ name: "Jão" });
+  state = {
+    posts: [
+      {
+        id: 1,
+        title: "O título 1",
+        body: "O corpo 1",
+      },
+      {
+        id: 2,
+        title: "O título 2",
+        body: "O corpo 2",
+      },
+      {
+        id: 3,
+        title: "O título 3",
+        body: "O corpo 3",
+      },
+    ],
   };
 
-  handleSetCont = (event) => {
-    event.preventDefault();
-    const { cont } = this.state;
-    this.setState({ cont: cont + 1 });
-  };
   render() {
-    const { name, cont } = this.state;
+    const { posts } = this.state;
 
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p onClick={this.handleSetName}>
-            {name} {cont}
-          </p>
-          <a
-            onClick={this.handleSetCont}
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {posts.map((post) => (
+          <div key={post.id}>
+            <h2>Título: {post.title}</h2>
+            <p>Corpo: {post.body}</p>
+          </div>
+        ))}
       </div>
     );
   }

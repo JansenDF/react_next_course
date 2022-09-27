@@ -1,5 +1,4 @@
 export const PostCard = ({ post }) => {
-  console.log(post);
   return (
     <div className="post">
       <img src={post.cover} alt={post.title} />

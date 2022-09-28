@@ -5,6 +5,7 @@ import "./styles.css";
 import { Posts } from "../../components/Posts";
 import { loadPosts } from "../../utils/loadPosts";
 import { Button } from "../../components/Button";
+import { TextInput } from "../../components/TextInput";
 
 class Home extends Component {
   state = {
@@ -12,6 +13,7 @@ class Home extends Component {
     allPosts: [],
     page: 0,
     postsPerPage: 2,
+    searchValue: "",
   };
 
   //Inicia o timeout como nulo
@@ -45,15 +47,49 @@ class Home extends Component {
 
     this.setState({ posts, page: nextPage });
   };
+  handleChange = (e) => {
+    const { value } = e.target;
+    this.setState({ searchValue: value });
+    console.log(value);
+  };
   render() {
-    const { posts, page, postsPerPage, allPosts } = this.state;
+    const { posts, page, postsPerPage, allPosts, searchValue } = this.state;
     const noMorePosts = page + postsPerPage >= allPosts.length;
+
+    const postFiltered = !!searchValue
+      ? allPosts.filter((post) => {
+          return post.title.toLowerCase().includes(searchValue.toLowerCase());
+        })
+      : posts;
 
     return (
       <section className="container">
-        <Posts posts={posts} />
+        <div className="search-container">
+          {!!searchValue && (
+            <>
+              <h1>Search value: {searchValue}</h1>
+              <p>
+                Encontramos {postFiltered.length} posts com a palavra "
+                {searchValue}"
+              </p>
+            </>
+          )}
+          <TextInput
+            searchValue={searchValue}
+            handleChange={this.handleChange}
+          />
+        </div>
+
+        {postFiltered.length > 0 && (
+          <>
+            <Posts posts={postFiltered} />
+          </>
+        )}
+        {postFiltered.length === 0 && <p>Não existem Posts com esta busca</p>}
         <div className="button-container">
-          <Button clicado={this.loadMorePosts} disable={noMorePosts} />
+          {!searchValue && (
+            <Button clicado={this.loadMorePosts} disable={noMorePosts} />
+          )}
         </div>
       </section>
     );

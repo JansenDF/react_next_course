@@ -46,12 +46,15 @@ class Home extends Component {
     this.setState({ posts, page: nextPage });
   };
   render() {
-    const { posts } = this.state;
+    const { posts, page, postsPerPage, allPosts } = this.state;
+    const noMorePosts = page + postsPerPage >= allPosts.length;
 
     return (
       <section className="container">
         <Posts posts={posts} />
-        <Button clicado={this.loadMorePosts} />
+        <div className="button-container">
+          <Button clicado={this.loadMorePosts} disable={noMorePosts} />
+        </div>
       </section>
     );
   }

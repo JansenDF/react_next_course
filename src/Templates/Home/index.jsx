@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import "./styles.css";
 
@@ -11,14 +11,18 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [page, setPage] = useState(0);
-  const [postPerPage, setPostPerPage] = useState(2);
+  const [postPerPage] = useState(2);
   const [searchValue, setSearchValue] = useState("");
 
-  const handleLoadPosts = async () => {
+  const handleLoadPosts = useCallback(async (page, postPerPage) => {
     const postsAndPhotos = await loadPosts();
     setPosts(postsAndPhotos.slice(page, postPerPage));
     setAllPosts(postsAndPhotos);
-  };
+  }, []);
+
+  useEffect(() => {
+    handleLoadPosts(0, postPerPage);
+  }, [handleLoadPosts, postPerPage]);
 
   const loadMorePosts = () => {
     const nextPage = page + postPerPage;
@@ -42,10 +46,6 @@ const Home = () => {
         return post.title.toLowerCase().includes(searchValue.toLowerCase());
       })
     : posts;
-
-  useEffect(() => {
-    handleLoadPosts();
-  }, []);
 
   return (
     <section className="container">

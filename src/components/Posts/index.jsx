@@ -1,6 +1,7 @@
 import "./styles.css";
 
 import { PostCard } from "../PostCard";
+
 export const Posts = ({ posts }) => {
   return (
     <div className="posts">

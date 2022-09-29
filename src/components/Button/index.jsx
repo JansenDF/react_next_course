@@ -1,15 +1,20 @@
 import "./styles.css";
 
-import { Component } from "react";
+export const Button = ({ clicado, disable }) => {
+  return (
+    <button className="button" onClick={clicado} disabled={disable}>
+      More Pages
+    </button>
+  );
+};
+// export class Button2 extends Component {
+//   render() {
+//     const { clicado, disable } = this.props;
 
-export class Button extends Component {
-  render() {
-    const { clicado, disable } = this.props;
-
-    return (
-      <button className="button" onClick={clicado} disabled={disable}>
-        More Pages
-      </button>
-    );
-  }
-}
+//     return (
+//       <button className="button" onClick={clicado} disabled={disable}>
+//         More Pages
+//       </button>
+//     );
+//   }
+// }

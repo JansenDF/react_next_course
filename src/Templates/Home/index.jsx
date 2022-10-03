@@ -70,7 +70,11 @@ const Home = () => {
       {postFiltered.length === 0 && <p>Não existem Posts com esta busca</p>}
       <div className="button-container">
         {!searchValue && (
-          <Button clicado={loadMorePosts} disable={noMorePosts} />
+          <Button
+            clicado={loadMorePosts}
+            disable={noMorePosts}
+            text="More Posts"
+          />
         )}
       </div>
     </section>

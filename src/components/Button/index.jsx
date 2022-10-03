@@ -1,9 +1,9 @@
 import "./styles.css";
 
-export const Button = ({ clicado, disable }) => {
+export const Button = ({ text, clicado, disable }) => {
   return (
     <button className="button" onClick={clicado} disabled={disable}>
-      More Pages
+      {text}
     </button>
   );
 };

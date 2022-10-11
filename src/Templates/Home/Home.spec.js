@@ -148,4 +148,22 @@ describe("<Home />", () => {
       screen.queryByRole("heading", { name: "title3 3" })
     ).not.toBeInTheDocument();
   });
+
+  it("Should more posts", async () => {
+    render(<Home />);
+
+    const noMorePosts = screen.getByText("Não existem Posts com esta busca");
+
+    // expect.assertions(16);
+
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const button = screen.getByText("More Posts");
+
+    userEvent.click(button);
+    expect(
+      screen.getByRole("heading", { name: "title3 3" })
+    ).toBeInTheDocument();
+    expect(button).toBeDisabled();
+  });
 });

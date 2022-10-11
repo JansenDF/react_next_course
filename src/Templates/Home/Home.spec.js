@@ -3,6 +3,7 @@ import {
   screen,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 
@@ -67,5 +68,84 @@ describe("<Home />", () => {
 
     const button = screen.getByRole("button", { name: /more posts/i });
     expect(button).toBeInTheDocument();
+  });
+
+  it("Should search for posts", async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText("Não existem Posts com esta busca");
+
+    expect.assertions(16);
+
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const search = screen.getByPlaceholderText(/type your search/i);
+
+    const reset = (textInput) => {
+      userEvent.clear(textInput);
+    };
+
+    expect(search).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("heading", { name: "title1 1" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "title2 2" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "title3 3" })
+    ).not.toBeInTheDocument();
+
+    //Test input search with "title1"
+    userEvent.type(search, "title1");
+    expect(
+      screen.getByRole("heading", { name: "title1 1" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "title2 2" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "title3 3" })
+    ).not.toBeInTheDocument();
+    //Test if it displays text search
+    expect(
+      screen.getByRole("heading", { name: "Search value: title1" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Encontramos 1 posts com a palavra "title1"')
+    ).toBeInTheDocument();
+
+    //clear input search
+    reset(search);
+
+    //test input search with text unavailable
+    userEvent.type(search, "sddasd");
+    expect(
+      screen.getByText("Não existem Posts com esta busca")
+    ).toBeInTheDocument();
+
+    //clear input search
+    reset(search);
+    expect(
+      screen.getByRole("heading", { name: "title1 1" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "title2 2" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "title3 3" })
+    ).not.toBeInTheDocument();
+
+    //Test input search with "title2"
+    userEvent.type(search, "title2");
+    expect(
+      screen.queryByRole("heading", { name: "title1 1" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "title2 2" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "title3 3" })
+    ).not.toBeInTheDocument();
   });
 });

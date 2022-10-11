@@ -36,7 +36,7 @@ const Home = () => {
   const handleChange = (e) => {
     const { value } = e.target;
     setSearchValue(value);
-    console.log(value);
+    // console.log(value);
   };
 
   const noMorePosts = page + postPerPage >= allPosts.length;
